@@ -32,7 +32,32 @@ app.post('/api/books', (req, res) => {
     res.status(201).json(nuevo);
 });
 
+// PUT: Actualizar un libro existente
+app.put('/api/books/:id', (req, res) => {
+    const bookId = parseInt(req.params.id);
+    const index = books.findIndex(b => b.id === bookId);
+
+    if (index === -1) {
+        return res.status(404).json({ error: "Libro no encontrado" });
+    }
+
+    books[index] = { id: bookId, ...req.body };
+    res.status(200).json(books[index]);
+});
+
+// DELETE: Eliminar un libro
+app.delete('/api/books/:id', (req, res) => {
+    const bookId = parseInt(req.params.id);
+    const index = books.findIndex(b => b.id === bookId);
+
+    if (index === -1) {
+        return res.status(404).json({ error: "Libro no encontrado" });
+    }
+
+    books.splice(index, 1);
+    res.status(200).json({ mensaje: "Libro eliminado correctamente" });
+});
+
 app.listen(port, ()=>{
     console.log(`Servidor está escuchando en http://localhost:${port}`);
 });
-
